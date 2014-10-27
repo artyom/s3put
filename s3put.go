@@ -15,6 +15,7 @@ import (
 )
 
 func main() {
+	log.SetFlags(0)
 	defaultACL := os.Getenv("S3_ACL")
 	if len(defaultACL) == 0 {
 		defaultACL = "private"
@@ -73,6 +74,8 @@ func main() {
 		}
 		os.Exit(1)
 	}
+
+	log.SetFlags(log.Ltime)
 	connection := s3.New(auth, region)
 	bucket := connection.Bucket(config.Bucket)
 	buf := make([]byte, 512)
@@ -96,6 +99,7 @@ func main() {
 		if _, err := f.Seek(0, os.SEEK_SET); err != nil {
 			log.Fatal(err)
 		}
+		log.Printf("uploading %s (%s)", f.Name(), contType)
 		err = bucket.PutReader(
 			path.Join(config.Prefix, path.Base(f.Name())),
 			f, st.Size(), contType, acl,
