@@ -38,9 +38,7 @@ func main() {
 		AccessKey: os.Getenv("S3_ACCESS_KEY"),
 		SecretKey: os.Getenv("S3_SECRET_KEY"),
 	}
-	if err := autoflags.Define(&config); err != nil {
-		log.Fatal(err)
-	}
+	autoflags.Define(&config)
 	flag.Parse()
 	if len(flag.Args()) == 0 {
 		flag.Usage()
